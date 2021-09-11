@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    # except loading schema.sql  data.sql
+    initialization-mode: always
+    #initialization-mode: never
+
+  jpa:
+    # auto generate ddl
+    generate-ddl: false
+    #generate-ddl: true
+    hibernate:
+      # specific for hibernate generate-ddl
+      ddl-auto: none
+      #ddl-auto: create
+
+    properties:
+      hibernate:
+        format_sql: true
+
+    show-sql: true
