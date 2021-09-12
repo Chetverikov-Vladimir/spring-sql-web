@@ -9,15 +9,15 @@ import org.springframework.context.annotation.Import
 import org.springframework.jdbc.core.JdbcTemplate
 
 @JdbcTest
-@Import(GenreRepositoryJdbcImpl::class)
-@DisplayName("GenreRepositoryJdbcImpl should ")
-internal class GenreRepositoryJdbcImplTest {
-
+@Import(GenreRepositoryJdbcTemplateImpl::class)
+@DisplayName("GenreRepositoryJdbcTemplateImpl should ")
+internal class GenreRepositoryJdbcTemplateImplTest {
     @Autowired
     lateinit var template: JdbcTemplate
 
     @Autowired
-    lateinit var repository: GenreRepositoryJdbcImpl
+    lateinit var repository: GenreRepositoryJdbcTemplateImpl
+
 
     @Test
     @DisplayName("correct save genre")
@@ -103,5 +103,4 @@ internal class GenreRepositoryJdbcImplTest {
 
     private fun getCountWithTemplate() = template.queryForObject("select count(*) from genres", Int::class.java)
         ?: throw RuntimeException("count is null")
-
 }
