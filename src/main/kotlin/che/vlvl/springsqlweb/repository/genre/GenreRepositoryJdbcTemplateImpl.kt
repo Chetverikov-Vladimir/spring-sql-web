@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class GenreRepositoryJdbcTemplateImpl(
     private val template: NamedParameterJdbcOperations
-) : GenreRepository {
+) : GenreRepositoryJdbc {
 
     private val saveRequest = "insert into genres(id, genre) values (null, :genre)"
     private val findRequest = "select * from genres where id = :id"
@@ -37,14 +37,14 @@ class GenreRepositoryJdbcTemplateImpl(
         }.filterNotNull().firstOrNull()
     }
 
-    override fun update(genre: Genre): Int {
+    override fun update(genre: Genre) {
         val parameters = mapOf("id" to genre.id, "genre" to genre.genre)
-        return template.update(updateRequest, parameters)
+        template.update(updateRequest, parameters)
     }
 
-    override fun delete(id: Long): Int {
+    override fun delete(id: Long) {
         val parameters = mapOf("id" to id)
-        return template.update(deleteQuery, parameters)
+        template.update(deleteQuery, parameters)
     }
 
     override fun count(): Long {

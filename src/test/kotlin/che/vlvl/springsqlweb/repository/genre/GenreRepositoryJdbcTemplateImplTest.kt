@@ -1,6 +1,8 @@
 package che.vlvl.springsqlweb.repository.genre
 
 import che.vlvl.springsqlweb.model.Genre
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -30,11 +32,11 @@ internal class GenreRepositoryJdbcTemplateImplTest {
         val savedGenre = repository.save(genreForSave)
 
         val countAfterSave = getCountWithTemplate()
-        assert(countAfterSave - countBeforeSave == 1)
+        assertEquals(1, countAfterSave - countBeforeSave)
 
         val foundGenre =
             getGenreById(savedGenre.id) ?: throw RuntimeException("genre with id = ${savedGenre.id} not found")
-        assert(foundGenre == savedGenre)
+        assertEquals(savedGenre, foundGenre)
     }
 
     @Test
@@ -48,48 +50,45 @@ internal class GenreRepositoryJdbcTemplateImplTest {
             getGenreById(savedGenre.id) ?: throw RuntimeException("genre with id = ${savedGenre.id} not found")
         val foundGenreWithRepo = repository.find(savedGenre.id)
 
-        assert(foundGenreWithRepo == foundGenreWithTemplate)
+        assertEquals(foundGenreWithTemplate, foundGenreWithRepo)
     }
 
     @Test
     @DisplayName("correct update genre")
     fun update() {
 
-        val updatedRows = 1
         val savedGenre = repository.save(Genre(genre = "test genre"))
         val genreForUpdate = savedGenre.copy(genre = "updated genre")
 
-        val updatedCount = repository.update(genreForUpdate)
-        assert(updatedCount == updatedRows)
+        repository.update(genreForUpdate)
 
         val updatedGenre =
             getGenreById(genreForUpdate.id) ?: throw RuntimeException("genre with id = ${genreForUpdate.id} not found")
-        assert(genreForUpdate == updatedGenre)
+        assertEquals(genreForUpdate, updatedGenre)
     }
 
     @Test
     @DisplayName("correct delete genre")
     fun delete() {
-        val deletedRows = 1
+
         val savedGenre = repository.save(Genre(genre = "test genre"))
 
         val countBeforeDelete = getCountWithTemplate()
 
-        val deletedCount = repository.delete(savedGenre.id)
-        assert(deletedCount == deletedRows)
+        repository.delete(savedGenre.id)
 
         val countAfterDelete = getCountWithTemplate()
-        assert(countBeforeDelete - countAfterDelete == deletedRows)
+        assertEquals(1, countBeforeDelete - countAfterDelete)
 
         val genreAfterDelete = getGenreById(savedGenre.id)
-        assert(genreAfterDelete == null)
+        assertNull(genreAfterDelete)
 
     }
 
     @Test
     @DisplayName("correct count genres")
     fun count() {
-        assert(repository.count() == getCountWithTemplate().toLong())
+        assertEquals(getCountWithTemplate().toLong(), repository.count())
     }
 
 

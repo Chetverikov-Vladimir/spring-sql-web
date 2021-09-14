@@ -6,7 +6,7 @@ import java.sql.Statement
 import javax.sql.DataSource
 
 @Repository
-class GenreRepositoryJdbcImpl(private val ds: DataSource) : GenreRepository {
+class GenreRepositoryJdbcImpl(private val ds: DataSource) : GenreRepositoryJdbc {
 
     private val saveRequest = "insert into genres(id, genre) values (null, ?)"
     private val findRequest = "select * from genres where id = ?"
@@ -44,19 +44,19 @@ class GenreRepositoryJdbcImpl(private val ds: DataSource) : GenreRepository {
 
     }
 
-    override fun update(genre: Genre): Int {
+    override fun update(genre: Genre) {
         ds.connection.prepareStatement(updateRequest).use {
             it.setLong(2, genre.id)
             it.setString(1, genre.genre)
-            return it.executeUpdate()
+            it.executeUpdate()
         }
 
     }
 
-    override fun delete(id: Long): Int {
+    override fun delete(id: Long) {
         ds.connection.prepareStatement(deleteQuery).use {
             it.setLong(1, id)
-            return it.executeUpdate()
+            it.executeUpdate()
         }
     }
 
